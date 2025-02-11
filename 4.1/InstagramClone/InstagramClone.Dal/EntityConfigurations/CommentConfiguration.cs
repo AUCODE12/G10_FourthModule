@@ -19,6 +19,9 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.Property(c => c.WritingTime)
             .IsRequired(true);
 
+        builder.Property(c => c.ReplyToCommentId)
+            .IsRequired(false);
+
         builder.HasOne(c => c.Post)
             .WithMany(p => p.Comments)
             .HasForeignKey(c => c.PostId)

@@ -1,10 +1,7 @@
 ﻿namespace InstagramClone.Bll.DTOs;
 
-public class AccountDto
+public class AccountDto : AccountCreateDto
 {
-    public long? AccountId { get; set; }
-    public string Username { get; set; }
-    public string Bio { get; set; }
     public List<AccountDto>? Folleowers { get; set; }
     public List<AccountDto>? Following { get; set; }
     public List<PostDto>? Posts { get; set; }

@@ -17,13 +17,13 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<long> PostAccount(AccountDto account)
+    public async Task<long> PostAccount(AccountCreateDto account)
     {
         return await _accountService.AddAccount(account);
     }
 
     [HttpPut("edit")]
-    public async Task PutAccount(AccountDto account)
+    public async Task PutAccount(AccountCreateDto account)
     {
         await _accountService.UpdateAccount(account);
     }

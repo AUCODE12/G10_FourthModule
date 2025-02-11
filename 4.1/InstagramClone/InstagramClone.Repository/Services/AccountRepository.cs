@@ -29,9 +29,8 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account> GetAccountById(long id)
     {
-        var account = await _mainContext.Accounts.FirstOrDefaultAsync(a => a.AccountId == id);
-        if (account is null) throw new Exception("Not Found");
-        return account;
+        var account = await _mainContext.Accounts.FindAsync(id);
+        return account ?? throw new Exception("Not Found");
     }
 
     public async Task<List<Account>> GetAllAccounts()

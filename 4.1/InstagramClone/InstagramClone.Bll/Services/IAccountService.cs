@@ -4,9 +4,9 @@ namespace InstagramClone.Bll.Services;
 
 public interface IAccountService
 {
-    Task<long> AddAccount(AccountDto account);
+    Task<long> AddAccount(AccountCreateDto account);
 
-    Task UpdateAccount(AccountDto account);
+    Task UpdateAccount(AccountCreateDto account);
 
     Task DeleteAccount(long id);
 

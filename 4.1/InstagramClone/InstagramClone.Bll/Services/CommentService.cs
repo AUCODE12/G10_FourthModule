@@ -13,7 +13,7 @@ public class CommentService : ICommentService
         _commentRepository = commentRepository;
     }
 
-    public async Task<long> AddComment(CommentDto comment)
+    public async Task<long> AddComment(CommentCreateDto comment)
     {
         return await _commentRepository.AddComment(ConvertToCommentEntity(comment));
     }
@@ -34,20 +34,20 @@ public class CommentService : ICommentService
         return ConvertToDto(await _commentRepository.GetCommentById(id));
     }
 
-    public async Task UpdateComment(CommentDto comment)
+    public async Task UpdateComment(CommentCreateDto comment)
     {
         await _commentRepository.UpdateComment(ConvertToCommentEntity(comment));
     }
 
-    private Comment ConvertToCommentEntity(CommentDto commentDto)
+    private Comment ConvertToCommentEntity(CommentCreateDto commentDto)
     {
         return new Comment
         {
             ContentText = commentDto.ContentText,
             AccountId = commentDto.AccountId,
             PostId = commentDto.PostId,
-            WritingTime = commentDto.WritingTime,
             ReplyToCommentId = commentDto.ReplyToCommentId,
+            WritingTime = DateTime.UtcNow
         };
     }
 
@@ -61,6 +61,35 @@ public class CommentService : ICommentService
             CommentId = comment.CommentId,
             WritingTime = comment.WritingTime,
             ReplyToCommentId = comment.ReplyToCommentId,
+            Account = comment.Account != null ? new AccountDto
+            {
+                AccountId = comment.Account.AccountId,
+                Bio = comment.Account.Bio,
+                Username = comment.Account.Username,
+            } : null,
+            Post = comment.Post != null ? new PostDto
+            {
+                AccountId = comment.Post.AccountId,
+                SetTime = comment.Post.SetTime,
+                PostId = comment.Post.PostId,
+                PostType = comment.Post.PostType,
+            } : null,
+            Replies = comment.Replies?.Select(r => new CommentDto
+            {
+                AccountId = r.AccountId,
+                CommentId = r.CommentId,
+                ContentText = r.ContentText,
+                PostId = r.PostId,
+                WritingTime = r.WritingTime,
+            }).ToList(),
+            ReplyToComment = comment.ReplyToComment != null ? new CommentDto
+            {
+                AccountId = comment.ReplyToComment.AccountId,
+                CommentId = comment.ReplyToComment.CommentId,
+                ContentText = comment.ReplyToComment.ContentText,
+                PostId = comment.ReplyToComment.PostId,
+                WritingTime = comment.ReplyToComment.WritingTime,
+            } : null,
         };
     }
 }

@@ -13,7 +13,7 @@ public class PostService : IPostService
         _postRepository = postRepository;
     }
 
-    public async Task<long> AddPost(PostDto post)
+    public async Task<long> AddPost(PostCreateDto post)
     {
         return await _postRepository.AddPost(ConvertToPostEntity(post));
     }
@@ -34,15 +34,16 @@ public class PostService : IPostService
         return ConvertToDto(await _postRepository.GetPostById(id));
     }
 
-    public async Task UpdatePost(PostDto post)
+    public async Task UpdatePost(PostCreateDto post)
     {
         await _postRepository.UpdatePost(ConvertToPostEntity(post));
     }
 
-    private Post ConvertToPostEntity(PostDto postDto)
+    private Post ConvertToPostEntity(PostCreateDto postDto)
     {
         return new Post
         {
+            PostId = postDto.PostId ?? 0,
             AccountId = postDto.AccountId,
             SetTime = postDto.SetTime,
             PostType = postDto.PostType,
@@ -56,7 +57,22 @@ public class PostService : IPostService
             PostType = post.PostType,
             PostId = post.PostId,
             AccountId = post.AccountId,
-            SetTime = post.SetTime, 
+            SetTime = post.SetTime,
+            Account = post.Account != null ? new AccountDto
+            {
+                AccountId = post.Account.AccountId,
+                Bio = post.Account.Bio,
+                Username = post.Account.Username,
+            } : null,
+            Comments = post.Comments?.Select(c => new CommentDto
+            {
+                CommentId = c.CommentId,
+                ContentText = c.ContentText,
+                WritingTime = c.WritingTime,
+                AccountId = c.AccountId,
+                PostId = c.PostId,
+                ReplyToCommentId = c.ReplyToCommentId,
+            }).ToList(),
         };
     }
 }

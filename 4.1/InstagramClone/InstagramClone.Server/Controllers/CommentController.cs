@@ -17,7 +17,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<long> PostComment(CommentDto comment)
+    public async Task<long> PostComment(CommentCreateDto comment)
     {
         return await _commentService.AddComment(comment);
     }
@@ -29,7 +29,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpPut("etid")]
-    public async Task PutComment(CommentDto comment)
+    public async Task PutComment(CommentCreateDto comment)
     {
         await _commentService.UpdateComment(comment);
     }

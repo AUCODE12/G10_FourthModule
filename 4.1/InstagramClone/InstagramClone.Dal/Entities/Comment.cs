@@ -10,7 +10,7 @@ public class Comment
     public long PostId { get; set; }
     public Post Post { get; set; }
     public long? ReplyToCommentId { get; set; }
-    public Comment ReplyToComment { get; set; }
-    public List<Comment> Replies { get; set; }
+    public Comment? ReplyToComment { get; set; }
+    public List<Comment>? Replies { get; set; }
 }
 

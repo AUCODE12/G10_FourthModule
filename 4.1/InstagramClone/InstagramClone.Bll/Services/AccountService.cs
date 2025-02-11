@@ -13,7 +13,7 @@ public class AccountService : IAccountService
         _accountRepository = accountRepository;
     }
 
-    public async Task<long> AddAccount(AccountDto account)
+    public async Task<long> AddAccount(AccountCreateDto account)
     {
         return await _accountRepository.AddAccount(ConvertToAccountEntity(account));
     }
@@ -34,17 +34,18 @@ public class AccountService : IAccountService
         return accounts.Select(a => ConvertToDto(a)).ToList();
     }
 
-    public async Task UpdateAccount(AccountDto account)
+    public async Task UpdateAccount(AccountCreateDto account)
     {
         await _accountRepository.UpdateAccount(ConvertToAccountEntity(account));
     }
 
-    private Account ConvertToAccountEntity(AccountDto accountDto)
+    private Account ConvertToAccountEntity(AccountCreateDto accountCreateDto)
     {
         return new Account
         {
-            Bio = accountDto.Bio,
-            Username = accountDto.Username,
+            AccountId = accountCreateDto.AccountId ?? 0,
+            Bio = accountCreateDto.Bio,
+            Username = accountCreateDto.Username,
         };
     }
 
@@ -54,6 +55,35 @@ public class AccountService : IAccountService
         {
             Bio = account.Bio,
             Username = account.Username,
+            AccountId = account.AccountId,
+            Comments = account.Comments?.Select(c => new CommentDto
+            {
+                CommentId = c.CommentId,
+                ContentText = c.ContentText,
+                WritingTime = c.WritingTime,
+                AccountId = c.AccountId,
+                PostId = c.PostId,
+                ReplyToCommentId = c.ReplyToCommentId,
+            }).ToList(),
+            Folleowers = account.Folleowers?.Select(fo => new AccountDto
+            {
+                AccountId = fo.AccountId,
+                Bio = fo.Bio,
+                Username = fo.Username,
+            }).ToList(),
+            Following = account.Following?.Select(f => new AccountDto
+            {
+                AccountId = f.AccountId,
+                Bio = f.Bio,
+                Username = f.Username,
+            }).ToList(),
+            Posts = account.Posts?.Select(p => new PostDto
+            {
+                PostId = p.PostId,
+                AccountId = p.AccountId,
+                PostType = p.PostType,
+                SetTime = p.SetTime,
+            }).ToList(),    
         };
     }
 }

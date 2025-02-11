@@ -4,11 +4,11 @@ namespace InstagramClone.Bll.Services;
 
 public interface ICommentService
 {
-    Task<long> AddComment(CommentDto comment);
+    Task<long> AddComment(CommentCreateDto comment);
 
     Task DeleteComment(long id);
 
-    Task UpdateComment(CommentDto comment);
+    Task UpdateComment(CommentCreateDto comment);
 
     Task<CommentDto> GetCommentById(long id);
 

@@ -16,13 +16,13 @@ public class PostController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<long> PostPost(PostDto post)
+    public async Task<long> PostPost(PostCreateDto post)
     {
         return await _postService.AddPost(post);
     }
 
     [HttpPut("edit")]
-    public async Task PutPost(PostDto post)
+    public async Task PutPost(PostCreateDto post)
     {
         await _postService.UpdatePost(post);
     }

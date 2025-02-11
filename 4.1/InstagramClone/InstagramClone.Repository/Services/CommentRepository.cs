@@ -34,9 +34,8 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> GetCommentById(long id)
     {
-        var comment = await _mainContext.Comments.FirstOrDefaultAsync(c => c.CommentId == id);
-        if (comment is null) throw new Exception("Not Found");
-        return comment;
+        var comment = await _mainContext.Comments.FindAsync(id);
+        return comment ?? throw new Exception("Not Found");
     }
 
     public async Task UpdateComment(Comment comment)

@@ -34,9 +34,8 @@ public class PostRepository : IPostRepository
 
     public async Task<Post> GetPostById(long id)
     {
-        var post = await _mainContext.Posts.FirstOrDefaultAsync(p => p.PostId == id);
-        if (post is null) throw new Exception("Not Found");
-        return post;
+        var post = await _mainContext.Posts.FindAsync(id);
+        return post ?? throw new Exception("Not Found");
     }
 
     public async Task UpdatePost(Post post)

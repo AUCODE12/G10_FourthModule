@@ -4,9 +4,9 @@ namespace InstagramClone.Bll.Services;
 
 public interface IPostService
 {
-    Task<long> AddPost(PostDto post);
+    Task<long> AddPost(PostCreateDto post);
 
-    Task UpdatePost(PostDto post);
+    Task UpdatePost(PostCreateDto post);
 
     Task DeletePost(long id);
 

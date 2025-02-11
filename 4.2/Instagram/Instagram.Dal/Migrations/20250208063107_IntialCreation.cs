@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace InstagramClone.Dal.Migrations
+namespace Instagram.Dal.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class IntialCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,35 +17,12 @@ namespace InstagramClone.Dal.Migrations
                 {
                     AccountId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Account", x => x.AccountId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AccountAccount",
-                columns: table => new
-                {
-                    FolleowersAccountId = table.Column<long>(type: "bigint", nullable: false),
-                    FollowingAccountId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccountAccount", x => new { x.FolleowersAccountId, x.FollowingAccountId });
-                    table.ForeignKey(
-                        name: "FK_AccountAccount_Account_FolleowersAccountId",
-                        column: x => x.FolleowersAccountId,
-                        principalTable: "Account",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccountAccount_Account_FollowingAccountId",
-                        column: x => x.FollowingAccountId,
-                        principalTable: "Account",
-                        principalColumn: "AccountId");
                 });
 
             migrationBuilder.CreateTable(
@@ -54,8 +31,8 @@ namespace InstagramClone.Dal.Migrations
                 {
                     PostId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PostType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    SetTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PostType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -75,11 +52,11 @@ namespace InstagramClone.Dal.Migrations
                 {
                     CommentId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContentText = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    WritingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<long>(type: "bigint", nullable: false),
                     PostId = table.Column<long>(type: "bigint", nullable: false),
-                    ReplyToCommentId = table.Column<long>(type: "bigint", nullable: true)
+                    ParentCommentId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,8 +68,8 @@ namespace InstagramClone.Dal.Migrations
                         principalColumn: "AccountId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_Comment_ReplyToCommentId",
-                        column: x => x.ReplyToCommentId,
+                        name: "FK_Comment_Comment_ParentCommentId",
+                        column: x => x.ParentCommentId,
                         principalTable: "Comment",
                         principalColumn: "CommentId");
                     table.ForeignKey(
@@ -103,15 +80,10 @@ namespace InstagramClone.Dal.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_Username",
+                name: "IX_Account_UserName",
                 table: "Account",
-                column: "Username",
+                column: "UserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AccountAccount_FollowingAccountId",
-                table: "AccountAccount",
-                column: "FollowingAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_AccountId",
@@ -119,14 +91,14 @@ namespace InstagramClone.Dal.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comment_ParentCommentId",
+                table: "Comment",
+                column: "ParentCommentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comment_PostId",
                 table: "Comment",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comment_ReplyToCommentId",
-                table: "Comment",
-                column: "ReplyToCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_AccountId",
@@ -137,9 +109,6 @@ namespace InstagramClone.Dal.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AccountAccount");
-
             migrationBuilder.DropTable(
                 name: "Comment");
 
