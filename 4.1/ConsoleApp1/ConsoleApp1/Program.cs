@@ -6,7 +6,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine(Reverse(123));
+        Console.WriteLine(ClearDigits1("main g10*"));
     }
 
     public static string ClearDigits1(string s)
@@ -68,6 +68,7 @@ internal class Program
         return Int32.Parse(list.ToArray());
     }
 
+    /*
     public static string FindValidPair(string s)
     {
         int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -83,5 +84,26 @@ internal class Program
             if (keyValuePairs.Key)
         }
         
+    }
+    */
+
+    public static string LongestCommonPrefix(string[] strs)
+    {
+        if (strs == null || strs.Length == 0)
+            return "";
+
+        string prefix = strs[0];
+
+        for (int i = 1; i < strs.Length; i++)
+        {
+            while (strs[i].IndexOf(prefix) != 0)
+            {
+                prefix = prefix.Substring(0, prefix.Length - 1);
+                if (prefix == "")
+                    return "";
+            }
+        }
+
+        return prefix;
     }
 }

@@ -58,7 +58,6 @@ public class CommentService : ICommentService
             ContentText = comment.ContentText,
             PostId= comment.PostId,
             AccountId= comment.AccountId,
-            CommentId = comment.CommentId,
             WritingTime = comment.WritingTime,
             ReplyToCommentId = comment.ReplyToCommentId,
             Account = comment.Account != null ? new AccountDto
@@ -77,7 +76,6 @@ public class CommentService : ICommentService
             Replies = comment.Replies?.Select(r => new CommentDto
             {
                 AccountId = r.AccountId,
-                CommentId = r.CommentId,
                 ContentText = r.ContentText,
                 PostId = r.PostId,
                 WritingTime = r.WritingTime,
@@ -85,7 +83,6 @@ public class CommentService : ICommentService
             ReplyToComment = comment.ReplyToComment != null ? new CommentDto
             {
                 AccountId = comment.ReplyToComment.AccountId,
-                CommentId = comment.ReplyToComment.CommentId,
                 ContentText = comment.ReplyToComment.ContentText,
                 PostId = comment.ReplyToComment.PostId,
                 WritingTime = comment.ReplyToComment.WritingTime,

@@ -1,11 +1,11 @@
-﻿using Instagram.Bll.MappingProfiles;
+﻿//using Instagram.Bll.MappingProfiles;
 
-namespace Instagram.Server.Configurations;
+//namespace Instagram.Server.Configurations;
 
-public static class AutoMapperConfiguration
-{
-    public static void ConfigureAutoMappers(this WebApplicationBuilder builder)
-    {
-        builder.Services.AddAutoMapper(typeof(CommentProfile));
-    }
-}
+//public static class AutoMapperConfiguration
+//{
+//    public static void ConfigureAutoMappers(this WebApplicationBuilder builder)
+//    {
+//        builder.Services.AddAutoMapper(typeof(CommentProfile));
+//    }
+//}
