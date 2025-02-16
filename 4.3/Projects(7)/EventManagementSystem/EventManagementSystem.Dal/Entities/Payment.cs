@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EventManagementSystem.Dal.Enums;
 
-namespace EventManagementSystem.Dal.Entities
+namespace EventManagementSystem.Dal.Entities;
+
+public class Payment
 {
-    internal class Payment
-    {
-    }
+    public long PaymentId { get; set; }
+    public decimal Amount { get; set; }
+    public PaymentStatus PaymentStatus { get; set; }
+
+    public long TicketId { get; set; }
+    public Ticket Ticket { get; set; }
 }

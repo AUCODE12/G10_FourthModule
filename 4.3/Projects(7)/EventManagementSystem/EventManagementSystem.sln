@@ -5,6 +5,12 @@ VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementSystem.Api", "EventManagementSystem.Api\EventManagementSystem.Api.csproj", "{66ACD6E9-69FB-4425-B7D3-C13F3DDC4A9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementSystem.Dal", "EventManagementSystem.Dal\EventManagementSystem.Dal.csproj", "{15CE1DFF-D478-4B47-BE4A-1945350622B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementSystem.Bll", "EventManagementSystem.Bll\EventManagementSystem.Bll.csproj", "{6B0E1755-16A6-4529-89C1-4115E71BEEEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManagementSystem.Repository", "EventManagementSystem.Repository\EventManagementSystem.Repository.csproj", "{91F7E893-0ABB-48B4-AAFF-6959BF34B405}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{66ACD6E9-69FB-4425-B7D3-C13F3DDC4A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66ACD6E9-69FB-4425-B7D3-C13F3DDC4A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66ACD6E9-69FB-4425-B7D3-C13F3DDC4A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15CE1DFF-D478-4B47-BE4A-1945350622B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15CE1DFF-D478-4B47-BE4A-1945350622B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15CE1DFF-D478-4B47-BE4A-1945350622B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15CE1DFF-D478-4B47-BE4A-1945350622B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B0E1755-16A6-4529-89C1-4115E71BEEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B0E1755-16A6-4529-89C1-4115E71BEEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B0E1755-16A6-4529-89C1-4115E71BEEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B0E1755-16A6-4529-89C1-4115E71BEEEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F7E893-0ABB-48B4-AAFF-6959BF34B405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F7E893-0ABB-48B4-AAFF-6959BF34B405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F7E893-0ABB-48B4-AAFF-6959BF34B405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F7E893-0ABB-48B4-AAFF-6959BF34B405}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

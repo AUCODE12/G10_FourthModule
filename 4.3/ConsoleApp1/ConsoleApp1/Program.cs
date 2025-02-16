@@ -4,7 +4,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine(ClearDigits("bsd3 y u 5 5 87f iyutui"));
+        Console.WriteLine(SubarraySum([2]));
     }
 
     public static string ClearDigits(string s)
@@ -23,5 +23,72 @@ internal class Program
             }
         }
         return s;
+    }
+
+    public static IList<string> LetterCombinations(string digits)
+    {
+        if (string.IsNullOrEmpty(digits))
+            return new List<string>();
+
+        Dictionary<int, string> phoneNumKeys = new Dictionary<int, string>
+        {
+            { 2, "abc" }, 
+            { 3, "def" }, 
+            { 4, "ghi" }, 
+            { 5, "jkl" },
+            { 6, "mno" }, 
+            { 7, "pqrs" }, 
+            { 8, "tuv" }, 
+            { 9, "wxyz" }
+        };
+
+        var res = new List<string> { "" };
+
+        foreach (var d in digits)
+        {
+            int digit = d - '0';
+            if (!phoneNumKeys.TryGetValue(digit, out string letters))
+                continue;
+
+            foreach (var p in res)
+            {
+                foreach (var c in letters)
+                {
+
+                }
+            }
+        }
+        return res;
+    }
+
+    public static int CountPartitions(int[] nums)
+    {
+        
+        var count = 0;
+        var d = 0;
+        var sum = nums.Sum();
+
+        for (int i = 0; i < nums.Length - 1; i++)
+        {
+            d += nums[i];
+            var r = sum - d;
+            var a = r - d;
+            if (a % 2 == 0) count++;
+        }
+        return count;
+    }
+
+    public static int SubarraySum(int[] nums)
+    {
+        var sum = 0;
+        for (var i = 0; i < nums.Length; i++)
+        {
+            var start = Math.Max(0, i - nums[i]);
+            for (var j = start; j < i + 1; j++)
+            {
+                sum += nums[j];
+            }
+        }
+        return sum;
     }
 }

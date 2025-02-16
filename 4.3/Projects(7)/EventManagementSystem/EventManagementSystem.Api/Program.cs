@@ -1,4 +1,6 @@
 
+using EventManagementSystem.Api.Configurations;
+
 namespace EventManagementSystem.Api
 {
     public class Program
@@ -13,6 +15,8 @@ namespace EventManagementSystem.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.ConfigureDatabase();
 
             var app = builder.Build();
 
