@@ -25,18 +25,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasOne(u => u.Cart)
             .WithOne(u => u.User)
-            .HasForeignKey<Cart>(u => u.UserId);
+            .HasForeignKey<Cart>(u => u.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.Reviews)
             .WithOne(u => u.User)
-            .HasForeignKey(u => u.UserId);
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.Orders)
             .WithOne(u => u.User)
-            .HasForeignKey(u => u.UserId);
-
-        builder.HasMany(u => u.Payments)
-            .WithOne(u => u.User)
-            .HasForeignKey(u => u.UserId);
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

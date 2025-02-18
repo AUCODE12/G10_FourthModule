@@ -12,6 +12,9 @@ public class CartConfiguration : IEntityTypeConfiguration<Cart>
 
         builder.HasKey(c => c.CartId);
 
-        builder.
+        builder.HasMany(c => c.CartProducts)
+            .WithOne(c => c.Cart)
+            .HasForeignKey(c => c.CartId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

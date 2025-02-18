@@ -10,7 +10,4 @@ public class Payment
 
     public long OrderId { get; set; }
     public Order Order { get; set; }
-
-    public ICollection<Product> Products { get; set; }
-
 }

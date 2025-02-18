@@ -1,10 +1,12 @@
-﻿namespace ConsoleApp1;
+﻿using System.IO;
+
+namespace ConsoleApp1;
 
 internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine(SubarraySum([2]));
+        Console.WriteLine(MaximumWealth([[2, 8, 7], [7, 1, 3], [1, 9, 5]]));
     }
 
     public static string ClearDigits(string s)
@@ -90,5 +92,51 @@ internal class Program
             }
         }
         return sum;
+    }
+
+    public static int[] RunningSum(int[] nums)
+    {
+        var nums1d = new int[nums.Length];
+        for (var i = 0; i < nums.Length; i++)
+        {
+            var sum = 0; 
+            for (var j = 0; j <= i; j++)
+            {
+                sum += nums[j];
+            }
+            nums1d[i] = sum;
+        }
+        return nums1d;
+    }
+
+    public static int AddDigits(int num)
+    {
+        while (num >= 10)
+        {
+            var sum = 0;
+            while (num > 0)
+            {
+                sum += num % 10;
+                num /= 10;
+            }
+            num = sum;
+        }
+        return num;
+    }
+
+    public static int MaximumWealth(int[][] accounts)
+    {
+        //var sums = new int[accounts.Length];
+        int maxWealth = 0;
+        for (int i = 0; i < accounts.Length; i++)
+        {
+            var sum = 0;
+            for (int j = 0; j < accounts[i].Length; j++)
+            {
+                sum += accounts[i][j];
+            }
+            maxWealth = Math.Max(maxWealth, sum);
+        }
+        return maxWealth;
     }
 }

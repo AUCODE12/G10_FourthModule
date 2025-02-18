@@ -1,4 +1,5 @@
 ﻿using E_CommerceSystem.Dal.Entities;
+using E_CommerceSystem.Dal.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Dal;
@@ -9,8 +10,8 @@ public class MainContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Cart> Carts  { get; set; }
-    public DbSet<CartProduct> CartItems { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<CartProduct> CartProducts { get; set; }
+    public DbSet<OrderProduct> OrderProducts { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Review> Reviews { get; set; }
@@ -21,6 +22,14 @@ public class MainContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new CartConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new CartProductConfigurations());
+        modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
     }
 }
