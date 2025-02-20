@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wather7Tg.Bot", "Wather7Tg.Bot\Wather7Tg.Bot.csproj", "{FC9D2AA8-84AC-4A6A-AACE-ECB8CB24191A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wather7Tg.BotConfiguration", "Wather7Tg.BotConfiguration\Wather7Tg.BotConfiguration.csproj", "{5ADB0A32-D4B3-4DD9-A012-242403762671}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC9D2AA8-84AC-4A6A-AACE-ECB8CB24191A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC9D2AA8-84AC-4A6A-AACE-ECB8CB24191A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC9D2AA8-84AC-4A6A-AACE-ECB8CB24191A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC9D2AA8-84AC-4A6A-AACE-ECB8CB24191A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ADB0A32-D4B3-4DD9-A012-242403762671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ADB0A32-D4B3-4DD9-A012-242403762671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ADB0A32-D4B3-4DD9-A012-242403762671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ADB0A32-D4B3-4DD9-A012-242403762671}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {651B899B-F0CB-4EFA-B328-4C29DD360876}
+	EndGlobalSection
+EndGlobal

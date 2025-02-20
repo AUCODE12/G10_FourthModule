@@ -6,7 +6,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine(MaximumWealth([[2, 8, 7], [7, 1, 3], [1, 9, 5]]));
+        Console.WriteLine(SumOfGoodNumbers([1, 3, 2, 1, 5, 4], 2));
     }
 
     public static string ClearDigits(string s)
@@ -138,5 +138,18 @@ internal class Program
             maxWealth = Math.Max(maxWealth, sum);
         }
         return maxWealth;
+    }
+
+    public static int SumOfGoodNumbers(int[] nums, int k)
+    {
+        var sum = 0;
+        foreach (var num in nums)
+        {
+            if (num > k )
+            {
+                sum += num;
+            }
+        }
+        return sum;
     }
 }
