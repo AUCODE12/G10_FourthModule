@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RamazonTaqvimiBot", "RamazonTaqvimiBot.csproj", "{511086AD-862E-45B2-A3B2-73C3C8E60BFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{511086AD-862E-45B2-A3B2-73C3C8E60BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511086AD-862E-45B2-A3B2-73C3C8E60BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511086AD-862E-45B2-A3B2-73C3C8E60BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511086AD-862E-45B2-A3B2-73C3C8E60BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40E62A9F-4B74-411F-A3EA-EE15B92858D4}
+	EndGlobalSection
+EndGlobal
