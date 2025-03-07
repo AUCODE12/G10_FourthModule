@@ -1,0 +1,137 @@
+Customers 
+Orders
+Payments
+Products
+ShoppingCart
+
+Customers => Orders (one to many) 
+Orders <> Products (many to many) (OrderProduct)
+Payments - Orders (one to one)
+ShoppingCart - Customers (one to one)
+ShoppingCart <> Products (many to many) (ShopingCartProduct)
+
+Comments
+Posts
+Likes
+Users
+Followers
+
+Users => Posts (One-to-Many)
+Users => Comments (One-to-Many)
+Users => Likes (One-to-Many)
+Posts => Comments (One-to-Many)-
+	
+
+
+
+CREATE TABLE Orders (
+	OrdersId BIGINT IDENTITY(1, 1) PRIMARY KEY,
+	OrderDate DATETIME NOT NULL,
+	TotalAmount DECIMAL(18, 2) NOT NULL,
+
+	CustomerId BIGINT NOT NULL,
+	CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Products (
+	ProductId BIGINT IDENTITY(1, 1) PRIMARY KEY,
+	Name NVARCHAR(150) NOT NULL,
+	Price DECIMAL(18, 2) NOT NULL,
+	Description NVARCHAR(200) NOT NULL
+);
+
+
+Create Table Payments (
+	PaymentId BIGINT IDENTITY(1, 1) PRIMARY KEY,
+	PayerName nvarchar(50) not null,
+	Amount decimal(18, 2) not null,
+	IsSuccessful bit not null,
+	OrderId bigint unique not null,
+
+	CONSTRAINT FK_Payments_Orders FOREIGN KEY (OrderId) REFERENCES Orders(OrdersId) ON DELETE CASCADE
+);
+
+CREATE TABLE ShoppingCart (
+    ShoppingCartId BIGINT IDENTITY(1,1) PRIMARY KEY, 
+    Quantity INT NOT NULL CHECK (Quantity > 0), 
+    TotalPrice decimal(18, 2) not null, 
+    IsCheckedOut BIT DEFAULT 0, 
+    CustomerId BIGINT unique NOT NULL,
+
+	CONSTRAINT FK_ShoppingCart_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId) ON DELETE CASCADE
+);
+
+CREATE TABLE OrderProduct (
+    OrderId BIGINT NOT NULL,
+    ProductId BIGINT NOT NULL,
+
+    PRIMARY KEY (OrderId, ProductId),  
+    CONSTRAINT FK_OrderProduct_Orders FOREIGN KEY (OrderId) REFERENCES Orders(OrdersId) ON DELETE CASCADE,  
+    CONSTRAINT FK_OrderProduct_Products FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
+);
+
+create table ShopingCartProduct (
+	ShoppingCartId bigint not null,
+	ProductId bigint not null,
+
+	PRIMARY KEY (ShoppingCartId, ProductId),
+    CONSTRAINT FK_ShopingCartProduct_Products FOREIGN KEY (ProductId) REFERENCES Products(ProductId) ON DELETE CASCADE,  
+    CONSTRAINT FK_ShopingCartProduct_ShoppingCart FOREIGN KEY (ShoppingCartId) REFERENCES ShoppingCart(ShoppingCartId) ON DELETE CASCADE
+);
+
+
+
+
+create table Comments (
+	CommentId bigint identity(1, 1) primary key,
+	Massage nvarchar(200) not null,
+	MassageType nvarchar(50) not null,
+);
+
+create table Posts (
+	PostId bigint identity(1, 1) primary key,
+	PostText nvarchar(200) not null,
+	ImgUrl nvarchar,
+
+	CommentId bigint not null,
+	CONSTRAINT FK_Posts_Comments FOREIGN KEY (CommentId) REFERENCES Comments(CommentId) ON DELETE CASCADE
+);
+
+create table Likes (
+	LikeId bigint identity(1, 1) primary key,
+);
+
+create table Users (
+	UserId bigint identity(1, 1) primary key,
+	Username nvarchar(50) unique not null,
+	Firstname nvarchar(100) not null,
+	Lastnmae nvarchar(100) null,
+	Email nvarchar(200) unique not null,
+	Password nvarchar(200) unique not null,
+
+	PostId bigint not null,
+	LikeId bigint not null,
+	CommentId bigint not null,
+
+	CONSTRAINT FK_Users_Posts FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
+	CONSTRAINT FK_Users_Likes FOREIGN KEY (LikeId) REFERENCES Likes(LikeId) ON DELETE CASCADE,
+	CONSTRAINT FK_Users_Comments FOREIGN KEY (CommentId) REFERENCES Comments(CommentId) ON DELETE NO ACTION
+);
+
+create table Users (
+	UserId bigint identity(1, 1) primary key,
+	Username nvarchar(50) unique not null,
+	Firstname nvarchar(100) not null,
+	Lastnmae nvarchar(100) null,
+	Email nvarchar(200) unique not null,
+	Password nvarchar(200) unique not null,
+
+	PostId bigint not null,
+	LikeId bigint not null,
+	CommentId bigint not null,
+
+	CONSTRAINT FK_Users_Posts FOREIGN KEY (PostId) REFERENCES Posts(PostId) ON DELETE CASCADE,
+	CONSTRAINT FK_Users_Likes FOREIGN KEY (LikeId) REFERENCES Likes(LikeId) ON DELETE CASCADE,
+	CONSTRAINT FK_Users_Comments FOREIGN KEY (CommentId) REFERENCES Comments(CommentId) ON DELETE NO ACTION
+);

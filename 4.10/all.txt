@@ -1,0 +1,297 @@
+ADD
+Mavjud jadvalga yangi ustun qo‘shadi.
+ALTER TABLE Talabalar ADD Tugilgan_sana DATE;
+
+ADD CONSTRAINT
+Mavjud jadvalga cheklov qo‘shadi.
+ALTER TABLE Talabalar ADD CONSTRAINT chk_Yosh CHECK (Yosh >= 18);
+
+ALL
+Barcha subquery qiymatlari shartga javob bersa, TRUE qaytaradi.
+SELECT * FROM Talabalar WHERE Yosh > ALL (SELECT Yosh FROM O‘qituvchilar);
+
+ALTER
+Jadvaldagi ustunlarni qo‘shish, o‘chirish yoki o‘zgartirish uchun ishlatiladi.
+ALTER TABLE Talabalar ALTER COLUMN Ism VARCHAR(100);
+
+ALTER COLUMN
+Jadvaldagi ustunning ma’lumot turini o‘zgartiradi.
+ALTER TABLE Talabalar ALTER COLUMN Yosh INT;
+
+ALTER TABLE
+Ustun qo‘shish, o‘chirish yoki o‘zgartirish imkonini beradi.
+ALTER TABLE Talabalar DROP COLUMN Manzil;
+
+AND
+Ikkita shart to‘g‘ri bo‘lsa, natijani chiqaradi.
+SELECT * FROM Talabalar WHERE Yosh > 18 AND Fakultet = 'Dasturiy injiniring';
+
+ANY
+Agar subquery ichidagi hech bo‘lmaganda bitta qiymat shartga javob bersa, TRUE qaytaradi.
+SELECT * FROM Talabalar WHERE Yosh = ANY (SELECT Yosh FROM O‘qituvchilar);
+
+AS
+Ustun yoki jadval nomini vaqtincha o‘zgartirish uchun ishlatiladi.
+SELECT Ism AS TalabaIsmi FROM Talabalar;
+
+ASC
+Natijani o‘sish tartibida saralaydi.
+SELECT * FROM Talabalar ORDER BY Yosh ASC;
+
+BACKUP DATABASE
+Ma’lumotlar bazasining zaxira nusxasini yaratadi.
+BACKUP DATABASE Universitet TO DISK = 'C:\backup\universitet.bak';
+
+BETWEEN
+Berilgan diapazondagi qiymatlarni tanlaydi.
+SELECT * FROM Talabalar WHERE Yosh BETWEEN 18 AND 25;
+
+CASE
+Shartlarga qarab har xil natija qaytaradi.
+SELECT Ism, Yosh, 
+CASE 
+    WHEN Yosh < 18 THEN 'Voyaga yetmagan' 
+    ELSE 'Voyaga yetgan' 
+END AS Status
+FROM Talabalar;
+
+CHECK
+Ustunga cheklov qo‘yadi.
+ALTER TABLE Talabalar ADD CONSTRAINT chk_Yosh CHECK (Yosh > 16);
+
+COLUMN
+Ustunni o‘zgartirish yoki o‘chirish uchun ishlatiladi.
+ALTER TABLE Talabalar DROP COLUMN Manzil;
+
+CONSTRAINT
+Cheklovlar yaratish yoki o‘chirish uchun ishlatiladi.
+ALTER TABLE Talabalar ADD CONSTRAINT unikal_ism UNIQUE (Ism);
+
+CREATE
+Ma’lumotlar bazasi, jadval, indeks yoki protsedura yaratadi.
+CREATE TABLE Talabalar (Id INT PRIMARY KEY, Ism VARCHAR(50));
+
+CREATE DATABASE
+Yangi SQL bazasi yaratadi.
+CREATE DATABASE Universitet;
+
+CREATE INDEX
+Jadval ustuniga indeks qo‘shadi.
+CREATE INDEX idx_ism ON Talabalar (Ism);
+
+CREATE OR REPLACE VIEW
+Mavjud VIEWni yangilaydi yoki yaratadi.
+CREATE OR REPLACE VIEW Yoshlar AS SELECT Ism, Yosh FROM Talabalar WHERE Yosh > 18;
+
+CREATE TABLE
+Yangi jadval yaratadi.
+CREATE TABLE Talabalar (Id INT PRIMARY KEY, Ism VARCHAR(50), Yosh INT);
+
+CREATE PROCEDURE
+Yangi saqlangan protsedura yaratadi.
+CREATE PROCEDURE GetTalabalar AS BEGIN SELECT * FROM Talabalar; END;
+
+CREATE UNIQUE INDEX
+Jadvalda takroriy qiymatlarga yo‘l qo‘ymaydigan indeks yaratadi.
+CREATE UNIQUE INDEX idx_unique_ism ON Talabalar (Ism);
+
+CREATE VIEW
+Tanlangan natijalarga asoslangan VIEW yaratadi.
+CREATE VIEW TalabaYoshlari AS SELECT Ism, Yosh FROM Talabalar;
+
+DATABASE
+SQL bazasini yaratish yoki o‘chirish uchun ishlatiladi.
+DROP DATABASE Universitet;
+
+DEFAULT
+Ustunga standart qiymat belgilaydi.
+ALTER TABLE Talabalar ADD CONSTRAINT df_Yosh DEFAULT 18 FOR Yosh;
+
+DELETE
+Jadvaldan ma’lumotlarni o‘chiradi.
+DELETE FROM Talabalar WHERE Id = 1;
+
+DESC
+Natijani kamayish tartibida saralaydi.
+SELECT * FROM Talabalar ORDER BY Yosh DESC;
+
+DISTINCT
+Faqat noyob qiymatlarni tanlaydi.
+SELECT DISTINCT Fakultet FROM Talabalar;
+
+DROP
+Jadval, ustun, baza yoki cheklovni o‘chiradi.
+DROP TABLE Talabalar;
+
+DROP COLUMN
+Jadvaldan ustunni o‘chiradi.
+ALTER TABLE Talabalar DROP COLUMN Yosh;
+
+DROP CONSTRAINT
+Jadvaldagi cheklovni o‘chiradi.
+ALTER TABLE Talabalar DROP CONSTRAINT chk_Yosh;
+
+DROP DATABASE
+Bazada barcha ma’lumotlarni o‘chiradi.
+DROP DATABASE Universitet;
+
+DROP DEFAULT
+Ustundan DEFAULT qiymatini olib tashlaydi.
+ALTER TABLE Talabalar DROP CONSTRAINT df_Yosh;
+
+DROP INDEX
+Indeksni o‘chiradi.
+DROP INDEX idx_ism ON Talabalar;
+
+DROP TABLE
+Jadvalni o‘chiradi.
+DROP TABLE Talabalar;
+
+DROP VIEW
+VIEWni o‘chiradi.
+DROP VIEW TalabaYoshlari;
+
+EXEC
+Saqlangan protsedurani bajaradi.
+EXEC GetTalabalar;
+
+EXISTS
+Subquery natijalari mavjud bo‘lsa, TRUE qaytaradi.
+SELECT * FROM Talabalar WHERE EXISTS (SELECT * FROM O‘qituvchilar WHERE Talabalar.Yosh = O‘qituvchilar.Yosh);
+
+FOREIGN KEY
+Jadval ustunini boshqa jadvaldagi asosiy kalitga bog‘laydi.
+ALTER TABLE Talabalar ADD CONSTRAINT fk_Fakultet FOREIGN KEY (FakultetId) REFERENCES Fakultetlar(Id);
+
+FROM
+Ma’lumotlarni qaysi jadvaldan olishni ko‘rsatadi.
+SELECT * FROM Talabalar;
+
+FULL OUTER JOIN
+Ikkala jadvaldagi mos keladigan va mos kelmaydigan yozuvlarni ham chiqaradi.
+SELECT Talabalar.Ism, Fakultetlar.NomiFROM TalabalarFULL OUTER JOIN Fakultetlar ON Talabalar.FakultetId = Fakultetlar.Id;
+
+GROUP BY
+Qatorlarni guruhlash uchun ishlatiladi.
+SELECT Fakultet, COUNT(*) AS TalabalarSoni FROM Talabalar GROUP BY Fakultet;
+
+HAVING
+Guruhlangan natijalarga filter qo‘yish uchun ishlatiladi.
+SELECT Fakultet, COUNT() AS TalabalarSoni FROM Talabalar GROUP BY Fakultet HAVING COUNT() > 10;
+
+IN
+Qatorlarni berilgan qiymatlar to‘plamidan tanlaydi.
+SELECT * FROM Talabalar WHERE Fakultet IN ('Dasturiy injiniring', 'Axborot tizimlari');
+
+INDEX
+Ustunga tezkor qidiruv uchun indeks yaratadi.
+CREATE INDEX idx_Yosh ON Talabalar (Yosh);
+
+INNER JOIN
+Faqat ikkala jadvalda ham mos keladigan yozuvlarni chiqaradi.
+SELECT Talabalar.Ism, Fakultetlar.NomiFROM TalabalarINNER JOIN Fakultetlar ON Talabalar.FakultetId = Fakultetlar.Id;
+
+INSERT INTO
+Jadvalga yangi qator qo‘shadi.
+INSERT INTO Talabalar (Ism, Yosh, Fakultet) VALUES ('Ali', 20, 'Dasturiy injiniring');
+
+IS NULL
+Ustundagi NULL qiymatlarni tekshiradi.
+SELECT * FROM Talabalar WHERE Manzil IS NULL;
+
+IS NOT NULL
+NULL bo‘lmagan qiymatlarni tanlaydi.
+SELECT * FROM Talabalar WHERE Manzil IS NOT NULL;
+
+LEFT JOIN
+Chap jadvaldagi barcha yozuvlar va o‘ng jadvaldan mos yozuvlarni chiqaradi.
+SELECT Talabalar.Ism, Fakultetlar.NomiFROM TalabalarLEFT JOIN Fakultetlar ON Talabalar.FakultetId = Fakultetlar.Id;
+
+LIKE
+Matnni qisman moslashtirish uchun ishlatiladi.
+SELECT * FROM Talabalar WHERE Ism LIKE 'A%';
+
+LIMIT
+Tanlanadigan qatorlar sonini cheklaydi (ba’zi SQL versiyalarida TOP yoki FETCH ishlatiladi).
+SELECT * FROM Talabalar LIMIT 5;
+
+NOT
+Shartni inkor qilish uchun ishlatiladi.
+SELECT * FROM Talabalar WHERE NOT Fakultet = 'Dasturiy injiniring';
+
+NOT NULL
+Ustunda NULL qiymatlarga ruxsat bermaydi.
+ALTER TABLE Talabalar ALTER COLUMN Ism VARCHAR(50) NOT NULL;
+
+ORDER BY
+Natijalarni tartiblaydi.
+SELECT * FROM Talabalar ORDER BY Yosh DESC;
+
+OUTER JOIN
+Mos va mos kelmagan yozuvlarni chiqarish uchun ishlatiladi (FULL OUTER JOIN, LEFT JOIN, RIGHT JOIN).
+SELECT Talabalar.Ism, Fakultetlar.NomiFROM TalabalarFULL OUTER JOIN Fakultetlar ON Talabalar.FakultetId = Fakultetlar.Id;
+
+PRIMARY KEY
+Jadval ustunini unikal va takrorlanmas qilib belgilaydi.
+CREATE TABLE Talabalar (Id INT PRIMARY KEY, Ism VARCHAR(50));
+
+PROCEDURE
+Saqlangan protsedura yaratish uchun ishlatiladi.
+CREATE PROCEDURE GetTalabalar AS BEGIN SELECT * FROM Talabalar; END;
+
+RIGHT JOIN
+O‘ng jadvaldagi barcha yozuvlar va chap jadvaldan mos yozuvlarni chiqaradi.
+SELECT Talabalar.Ism, Fakultetlar.NomiFROM TalabalarRIGHT JOIN Fakultetlar ON Talabalar.FakultetId = Fakultetlar.Id;
+
+ROLLBACK
+Oldingi tranzaksiyani bekor qiladi.
+BEGIN TRANSACTION;DELETE FROM Talabalar WHERE Id = 5;ROLLBACK;
+
+SELECT
+Jadvaldan ma’lumotlarni tanlaydi.
+SELECT * FROM Talabalar;
+
+SELECT INTO
+Yangi jadval yaratib, boshqa jadvaldan ma’lumotlarni nusxalaydi.
+SELECT * INTO Talabalar_Nusxa FROM Talabalar;
+
+SET
+Ma’lumotlarni yangilash uchun ishlatiladi.
+UPDATE Talabalar SET Yosh = 21 WHERE Ism = 'Ali';
+
+TABLE
+Jadval yaratish yoki unga murojaat qilish uchun ishlatiladi.
+CREATE TABLE Talabalar (Id INT, Ism VARCHAR(50));
+
+TOP
+Tanlanadigan qatorlar sonini cheklaydi.
+SELECT TOP 3 * FROM Talabalar;
+
+TRUNCATE TABLE
+Jadvaldagi barcha qatorlarni o‘chiradi (lekin struktura saqlanib qoladi).
+TRUNCATE TABLE Talabalar;
+
+UNION
+Ikki yoki undan ortiq SELECT natijalarini birlashtiradi.
+SELECT Ism FROM Talabalar UNION SELECT Ism FROM O‘qituvchilar;
+
+UNIQUE
+Ustundagi qiymatlarning takrorlanishini oldini oladi.
+ALTER TABLE Talabalar ADD CONSTRAINT unik_ism UNIQUE (Ism);
+
+UPDATE
+Jadvaldagi mavjud yozuvlarni yangilaydi.
+UPDATE Talabalar SET Yosh = 22 WHERE Ism = 'Ali';
+
+VALUES
+INSERT INTO bilan yangi qator qo‘shish uchun ishlatiladi.
+INSERT INTO Talabalar (Ism, Yosh) VALUES ('Ali', 20);
+
+VIEW
+Saqlangan SELECT natijalarini virtual jadval sifatida yaratadi.
+CREATE VIEW TalabalarYoshi AS SELECT Ism, Yosh FROM Talabalar;
+
+WHERE
+Shart bilan natijalarni filtrlash uchun ishlatiladi.
+SELECT * FROM Talabalar WHERE Yosh > 18;
+

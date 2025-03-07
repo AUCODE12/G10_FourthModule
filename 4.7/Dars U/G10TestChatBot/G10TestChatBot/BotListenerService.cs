@@ -1,5 +1,4 @@
 ﻿using ChatBot.Bll.Services;
-using ChatBot.Dal;
 using ChatBot.Dal.Entites;
 using System.Globalization;
 using Telegram.Bot;
@@ -68,7 +67,7 @@ public class BotListenerService
                 return;
             }
 
-            if(message.Text == "Main menu")
+            if (message.Text == "Main menu")
             {
                 var menu = new ReplyKeyboardMarkup(new[]
                 {
@@ -86,7 +85,7 @@ public class BotListenerService
                     }
                 })
                 {
-                     ResizeKeyboard = true
+                    ResizeKeyboard = true
                 };
 
                 await botClient.SendTextMessageAsync(
@@ -130,7 +129,6 @@ public class BotListenerService
                                      $"Summary     : {userInfo.Summary}\n";
 
                     menu.AddButtons(
-                        new KeyboardButton("Update user info"),
                         new KeyboardButton("Delete all user info"),
                         new KeyboardButton("Main menu"));
                 }
@@ -168,7 +166,28 @@ public class BotListenerService
 
             if (message.Text == "Delete all user info")
             {
+                await bot.SendTextMessageAsync(
+                    chatId: user.Id,
+                    text: "Delete user info enter like this format\n\nDelete",
+                    parseMode: ParseMode.Markdown
+                );
 
+                return;
+            }
+
+            if (message.Text.StartsWith("Delete"))
+            {
+                //var deletionId = long.Parse(message.Text.Substring(20).Trim());
+
+                await userInfoService.DeleteUserInfoAsync(1);
+
+                await bot.SendTextMessageAsync(
+                chatId: user.Id,
+                text: "User Info is deleted",
+                parseMode: ParseMode.Markdown
+                );
+
+                return;
             }
 
             if (message.Text.StartsWith("Create user info"))
@@ -214,41 +233,66 @@ public class BotListenerService
 
             if (message.Text == "Education")
             {
-                var educations = await educationService.GetEducationsByUserInfoIdAsync(userInfoId);
-
-                var educationText = "Your education info below \n\n";
-
-                foreach (var education in educations)
-                {
-                    educationText += $"EducationId : {education.EducationId}\n" +
-                                     $"Institution : {education.Institution}\n\n";
-                }
-
-                var menu = new ReplyKeyboardMarkup(
-                        new KeyboardButton("Add education"),
-                        new KeyboardButton("Delete education"),
-                        new KeyboardButton("Main menu"))
+                var userInfo = await userInfoService.GetUserInfoByBotUserIdAsync(botUserId);
+                var menuNullUser = new ReplyKeyboardMarkup()
                 {
                     ResizeKeyboard = true
                 };
 
-                await botClient.SendTextMessageAsync(
-                chatId: user.Id,
-                text: educationText,
-                parseMode: ParseMode.Html,
-                replyMarkup: menu);
+                var textOfUserInfo = "";
+                if (userInfo is null)
+                {
+                    textOfUserInfo = "Your info not found press\nCreate user info button to create";
 
+                    menuNullUser.AddButtons(
+                        new KeyboardButton("Create user info"),
+                        new KeyboardButton("Main menu"));
+
+                    await bot.SendTextMessageAsync(
+                    chatId: user.Id,
+                    text: textOfUserInfo,
+                    parseMode: ParseMode.Markdown,
+                    replyMarkup: menuNullUser
+                    );
+                }
+                else
+                {
+                    var educations = await educationService.GetEducationsByUserInfoIdAsync(userInfoId);
+
+                    var educationText = "Your education info below \n\n";
+
+                    foreach (var education in educations)
+                    {
+                        educationText += $"EducationId : {education.EducationId}\n" +
+                                         $"Institution : {education.Institution}\n\n";
+                    }
+
+                    var menu = new ReplyKeyboardMarkup(
+                            new KeyboardButton("Add education"),
+                            new KeyboardButton("Delete education"),
+                            new KeyboardButton("Main menu"))
+                    {
+                        ResizeKeyboard = true
+                    };
+
+                    await botClient.SendTextMessageAsync(
+                    chatId: user.Id,
+                    text: educationText,
+                    parseMode: ParseMode.Html,
+                    replyMarkup: menu);
+                }
                 return;
+
             }
 
-            if(message.Text == "Add education")
+            if (message.Text == "Add education")
             {
                 var userInfoText = "Please enter education details in the following format:\n\n" +
                       "*Institution*\n" +
                       "*Degree*\n" +
                       "*StartDate*\n" +
                       "*EndDate*\n\n" +
-                      
+
                       "Example:\n" +
                       "Add education:\n" +
                       "TSIOS\n" +
@@ -265,18 +309,18 @@ public class BotListenerService
                 return;
             }
 
-            if(message.Text == "Delete education")
+            if (message.Text == "Delete education")
             {
                 await bot.SendTextMessageAsync(
                 chatId: user.Id,
-                text: "Enter education id like this format\n 'Delete educationId : 'place id",
+                text: "Enter education id like this format\n Delete educationId : place id",
                 parseMode: ParseMode.Markdown
                 );
 
                 return;
             }
 
-            if(message.Text.StartsWith("Delete educationId : "))
+            if (message.Text.StartsWith("Delete educationId : "))
             {
                 var deletionId = long.Parse(message.Text.Substring(21).Trim());
 
@@ -289,7 +333,6 @@ public class BotListenerService
                 );
 
                 return;
-
             }
 
             if (message.Text.StartsWith("Add education"))
@@ -317,35 +360,186 @@ public class BotListenerService
 
             if (message.Text == "Experience")
             {
+                var userInfo = await userInfoService.GetUserInfoByBotUserIdAsync(botUserId);
+                var menuNullUser = new ReplyKeyboardMarkup()
+                {
+                    ResizeKeyboard = true
+                };
+
+                var textOfUserInfo = "";
+                if (userInfo is null)
+                {
+                    textOfUserInfo = "Your info not found press\nCreate user info button to create";
+
+                    menuNullUser.AddButtons(
+                        new KeyboardButton("Create user info"),
+                        new KeyboardButton("Main menu"));
+
+                    await bot.SendTextMessageAsync(
+                        chatId: user.Id,
+                        text: textOfUserInfo,
+                        parseMode: ParseMode.Markdown,
+                        replyMarkup: menuNullUser
+                        );
+                }
+                else
+                {
+                    var experiences = await experienceService.GetExperiencesByUserInfoIdAsync(userInfoId);
+                    var experienceText = "Your experience below \n\n";
+                    foreach (var item in experiences)
+                    {
+                        experienceText += $"ExperienceId: {item.ExperienceId}\n" +
+                            $"Company: {item.Company}\n" +
+                            $"Position: {item.Position}" +
+                            $"StartDate: {item.StartDate}\n" +
+                            $"EndDate: {item.EndDate}\n" +
+                            $"Description: {item.Description}";
+                    }
+                    var menu = new ReplyKeyboardMarkup(
+                        new KeyboardButton("Add experience"),
+                        new KeyboardButton("Delete experience"),
+                        new KeyboardButton("Main menu"))
+                    {
+                        ResizeKeyboard = true
+                    };
+
+                    await botClient.SendTextMessageAsync(
+                        chatId: user.Id,
+                        text: experienceText,
+                        parseMode: ParseMode.Markdown,
+                        replyMarkup: menu);
+                }
+
+                return;
+            }
+
+            if (message.Text == "Add experience")
+            {
+                var userInfoText = "Please enter experience details in the following format:\n\n" +
+                      "*Company*\n" +
+                      "*Position*\n" +
+                      "*StartDate*\n" +
+                      "*EndDate*\n" +
+                      "*Description*\n" +
+
+                      "Example:\n" +
+                      "Add experience\n" +
+                      "Epam\n" +
+                      "Junior\n" +
+                      $"{DateTime.UtcNow}\n" +
+                      $"{DateTime.UtcNow}\n" +
+                      "Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque dis parturient montes, nascetur ridiculus mus.\n";
+
+                await bot.SendTextMessageAsync(
+                chatId: user.Id,
+                text: userInfoText,
+                parseMode: ParseMode.Markdown
+                );
+
+                return;
+            }
+
+            if (message.Text == "Delete experience")
+            {
+                await bot.SendTextMessageAsync(
+                    chatId: user.Id,
+                    text: "Enter experience id like this format\n Delete experienceId : place id",
+                    parseMode: ParseMode.Markdown
+                );
+
+                return;
+            }
+
+            if (message.Text.StartsWith("Add experience"))
+            {
+                var experienceInfotext = message.Text;
+                var data = experienceInfotext.Split("\n");
+                var experience = new Experience()
+                {
+                    Company = data[1],
+                    Position = data[2],
+                    StartDate = DateTime.ParseExact(data[3], "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    EndDate = DateTime.ParseExact(data[4], "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    Description = data[5],
+                    UserInfoId = userInfoId
+                };
+
+                await experienceService.AddExperienceAsync(experience);
+
+
+                await bot.SendTextMessageAsync(
+                chatId: user.Id,
+                text: "Saved",
+                parseMode: ParseMode.Markdown
+                );
+            }
+
+            if (message.Text.StartsWith("Delete experienceId : "))
+            {
+                var deletionId = long.Parse(message.Text.Substring(21).Trim());
+
+                await experienceService.DeleteExperienceAsync(deletionId, userInfoId);
+
+                await bot.SendTextMessageAsync(
+                chatId: user.Id,
+                text: "Experience is deleted",
+                parseMode: ParseMode.Markdown
+                );
+
                 return;
             }
 
             if (message.Text == "Skills")
             {
-                var skills = await skillService.GetSkillsByUserInfoIdAsync(userInfoId);
-                var skillText = "Your skill info below \n\n";
-               
-                foreach (var skill in skills)
-                {
-                    skillText += $"SkillId : {skill.SkillId}\n" +
-                                     $"Name : {skill.Name}\n\n" +
-                                     $"ProficiencyLevel : {skill.ProficiencyLevel}\n\n";
-                }
-
-                var menu = new ReplyKeyboardMarkup(
-                        new KeyboardButton("Add skill"),
-                        new KeyboardButton("Delete skill"),
-                        new KeyboardButton("Main menu"))
+                var userInfo = await userInfoService.GetUserInfoByBotUserIdAsync(botUserId);
+                var menuNullUser = new ReplyKeyboardMarkup()
                 {
                     ResizeKeyboard = true
                 };
 
-                await botClient.SendTextMessageAsync(
-                chatId: user.Id,
-                text: skillText,
-                parseMode: ParseMode.Html,
-                replyMarkup: menu);
+                var textOfUserInfo = "";
+                if (userInfo == null)
+                {
+                    textOfUserInfo = "Your info not found press\nCreate user info button to create";
 
+                    menuNullUser.AddButtons(
+                        new KeyboardButton("Create user info"),
+                        new KeyboardButton("Main menu"));
+
+                    await bot.SendTextMessageAsync(
+                        chatId: user.Id,
+                        text: textOfUserInfo,
+                        parseMode: ParseMode.Markdown,
+                        replyMarkup: menuNullUser
+                        );
+
+                }
+                else
+                {
+                    var skills = await skillService.GetSkillsByUserInfoIdAsync(userInfoId);
+                    var skillText = "Your skill info below \n\n";
+
+                    foreach (var skill in skills)
+                    {
+                        skillText += $"SkillId : {skill.SkillId}\n" +
+                                         $"Name : {skill.Name}\n" +
+                                         $"ProficiencyLevel : {skill.ProficiencyLevel}\n";
+                    }
+
+                    var menu = new ReplyKeyboardMarkup(
+                            new KeyboardButton("Add skill"),
+                            new KeyboardButton("Delete skill"),
+                            new KeyboardButton("Main menu"))
+                    {
+                        ResizeKeyboard = true
+                    };
+
+                    await botClient.SendTextMessageAsync(
+                    chatId: user.Id,
+                    text: skillText,
+                    parseMode: ParseMode.Html,
+                    replyMarkup: menu);
+                }
                 return;
             }
 
@@ -402,8 +596,8 @@ public class BotListenerService
                 var skill = new Skill()
                 {
                     Name = data[1],
-                    ProficiencyLevel = data[2]
-                                        
+                    ProficiencyLevel = data[2],
+                    UserInfoId = userInfoId
                 };
 
                 await skillService.AddSkillAsync(skill);
@@ -432,13 +626,10 @@ public class BotListenerService
                 return;
             }
 
-
             if (message.Text == "Get CV in .word")
             {
                 return;
             }
-
-
         }
 
         else if (update.Type == UpdateType.CallbackQuery)

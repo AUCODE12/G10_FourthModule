@@ -1,0 +1,143 @@
+SELECT column1, column2, ...
+FROM table_name;
+
+SELECT DISTINCT column1, column2, ...
+FROM table_name;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1, column2, ... ASC|DESC;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition1 AND condition2 AND condition3 ...;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition1 OR condition2 OR condition3 ...;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE NOT condition;
+
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...);
+
+SELECT column_names
+FROM table_name
+WHERE column_name IS NOT NULL;
+
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+DELETE FROM table_name WHERE condition;
+
+SELECT TOP number|percent column_name(s)
+FROM table_name
+WHERE condition;
+
+MIN() - returns the smallest value within the selected column
+MAX() - returns the largest value within the selected column
+COUNT() - returns the number of rows in a set
+SUM() - returns the total sum of a numerical column
+AVG() - returns the average value of a numerical column
+
+SELECT MIN(column_name)
+FROM table_name
+WHERE condition;
+
+SELECT MAX(column_name)
+FROM table_name
+WHERE condition;
+
+SELECT COUNT(column_name)
+FROM table_name
+WHERE condition;
+
+SELECT SUM(column_name)
+FROM table_name
+WHERE condition;
+
+SELECT AVG(column_name)
+FROM table_name
+WHERE condition;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE columnN LIKE pattern;
+
+%	Represents zero or more characters
+_	Represents a single character
+[]	Represents any single character within the brackets *
+^	Represents any character not in the brackets *
+-	Represents any single character within the specified range *
+{}	Represents any escaped character **
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name IN (value1, value2, ...);
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name BETWEEN value1 AND value2;
+
+SELECT column_name AS alias_name
+FROM table_name;
+
+SELECT column_name(s)
+FROM table_name AS alias_name;
+
+(INNER) JOIN: Returns records that have matching values in both tables
+LEFT (OUTER) JOIN: Returns all records from the left table, and the matched records from the right table
+RIGHT (OUTER) JOIN: Returns all records from the right table, and the matched records from the left table
+FULL (OUTER) JOIN: Returns all records when there is a match in either left or right table
+SQL INNER JOIN  SQL LEFT JOIN  SQL RIGHT JOIN  SQL FULL OUTER JOIN
+
+
+SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+SELECT column_name(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+
+SELECT column_name(s)
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column_name = table2.column_name
+WHERE condition;
+
+//self join
+SELECT column_name(s) 
+FROM table1 T1, table1 T2
+WHERE condition;
+
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s)
+ORDER BY column_name(s);
+
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+GROUP BY column_name(s)
+HAVING condition
+ORDER BY column_name(s);

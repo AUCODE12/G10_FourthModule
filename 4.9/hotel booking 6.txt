@@ -1,0 +1,34 @@
+6. Hotel Booking System 
+Entities:
+
+Customer (ID, Name, Email, PhoneNumber)
+Hotel (ID, Name, Location, Description)
+Room (ID, HotelId, RoomType, Price, Availability)
+Booking (ID, CustomerId, RoomId, StartDate, EndDate, Status)
+Payment (ID, BookingId, Amount, Status)
+Review (ID, CustomerId, HotelId, Rating, Comment)
+Employee (ID, Name, Role, HotelId)
+Service (ID, HotelId, ServiceName, Price)
+Complaint (ID, CustomerId, HotelId, Message, Status)
+
+
+Customer => Booking, Review, Complaint  
+Customer <> Hotel (through Review)  
+Customer <> Hotel (through Complaint)  
+
+Hotel => Room, Employee, Review, Complaint, Service  
+
+Booking == Payment  
+Booking => Complaint  
+	
+Room == Booking
+
+Customer
+Hotel
+Room
+Employee
+Service
+Booking
+Payment
+Review
+Complaint

@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using RamazonTaqvimiBot.Dal;
+using RamazonTaqvimiBot.Dal.Entities;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace RamazonTaqvimiBot;
@@ -11,6 +13,8 @@ internal class Program
     private static readonly string botToken = "7983717615:AAFQo2qbpFiUoFbz4vvrRJHsp9_bnk___-Y";
     private static readonly string apiUrl = "https://islomapi.uz/api/daily?region=";
     private static readonly TelegramBotClient botClient = new(botToken);
+    private static readonly MainContext mainContext = new MainContext();
+    private static Dictionary<long, string> userStates = new();
 
     static async Task Main()
     {
@@ -23,14 +27,74 @@ internal class Program
     {
         var chatId = update.Message?.Chat.Id ?? update.CallbackQuery?.Message?.Chat.Id;
         if (chatId == null) return;
+        var users = mainContext.Users;
 
         if (update.Message is { } message)
         {
+            var existingUser = await users.FirstOrDefaultAsync(u => u.TelegramUserId == chatId);
+
             if (message.Text == "/start")
             {
-                await bot.SendTextMessageAsync(chatId, "Assalomu alaykum! \nRamazon taqvimi botiga xush kelibsiz 😊\n\n", replyMarkup: GetMainButtons());
-                await bot.SendTextMessageAsync(chatId, "Qaysi shaharning taqvimi kerak?", replyMarkup: GetRegionButtons());
+                if (existingUser is null)
+                {
+                    // 1. Shaharning tanlanishini so‘raymiz
+                    await bot.SendTextMessageAsync(chatId, "Shaharingizni tanlang", replyMarkup: GetRegionButtons());
+                    return;
+                }
+                else
+                {
+                    // Foydalanuvchi oldin ro‘yxatdan o‘tgan bo‘lsa, asosiy menyuni ko‘rsatamiz
+                    await bot.SendTextMessageAsync(chatId, "Assalomu alaykum! \nRamazon taqvimi botiga xush kelibsiz 😊\n\n", replyMarkup: GetMainButtons());
+                    await bot.SendTextMessageAsync(chatId, "Qaysi shaharning taqvimi kerak?", replyMarkup: GetRegionButtons());
+                    return;
+                }
             }
+
+            // 2. Agar foydalanuvchi shahar tanlagan bo‘lsa, endi telefon raqamni so‘raymiz
+            if (GetRegions().Contains(message.Text))
+            {
+                // Foydalanuvchining shaharini vaqtincha saqlaymiz
+                userStates[chatId.Value] = message.Text;
+
+                await bot.SendTextMessageAsync(chatId, "Assalomu alaykum! Telefon raqamingizni yuboring",
+                    replyMarkup: new ReplyKeyboardMarkup(new KeyboardButton("📱 Telefon raqamni yuborish")
+                    {
+                        RequestContact = true
+                    })
+                    {
+                        ResizeKeyboard = true
+                    });
+                return;
+            }
+
+            // 3. Telefon raqamni olgandan keyin foydalanuvchini bazaga saqlaymiz
+            if (message.Contact is not null)
+            {
+                if (userStates.TryGetValue(chatId.Value, out var selectedCity))
+                {
+                    var savingUser = new UserTg
+                    {
+                        TelegramUserId = chatId.Value,
+                        FirstName = update.Message.Chat.FirstName,
+                        LastName = update.Message.Chat.LastName,
+                        Username = update.Message.Chat.Username,
+                        Location = selectedCity,
+                        IsBlocked = false,
+                        PhoneNumber = message.Contact.PhoneNumber
+                    };
+
+                    await mainContext.Users.AddAsync(savingUser);
+                    await mainContext.SaveChangesAsync();
+
+                    userStates.Remove(chatId.Value); // Vaqtinchalik ma'lumotni tozalaymiz
+
+                    // 4. Foydalanuvchiga asosiy menyuni chiqaramiz
+                    await bot.SendTextMessageAsync(chatId, "Assalomu alaykum! \nRamazon taqvimi botiga xush kelibsiz 😊\n\n", replyMarkup: GetMainButtons());
+                    await bot.SendTextMessageAsync(chatId, "Qaysi shaharning taqvimi kerak?", replyMarkup: GetRegionButtons());
+                    return;
+                }
+            }
+
             else if (message.Text == "Saharlik duosi")
             {
                 await bot.SendTextMessageAsync(chatId, "🤲 Saharlik duosi:\n\n" +
@@ -56,17 +120,57 @@ internal class Program
             {
                 await bot.SendTextMessageAsync(chatId, $"Siz {data} shaharini tanladingiz 😊\n\n1-30 mart orasida sanani tanlang:", replyMarkup: GetDateButtons(data));
             }
+
             else if (IsDate(data))
             {
                 string[] parts = data.Split('|');
                 string region = parts[0];
+                var response = string.Empty;
                 string date = parts[1];
+                if (data.EndsWith("Bugungi Kun"))
+                {
+                    string month = GetUzbekMonthName(DateTime.Today.Month);
+                    string today = $"{DateTime.Today.Day}-{month}";
+                    response = await GetPrayerTimes(region, today);
+                    await bot.SendTextMessageAsync(chatId, $"📅 {today} uchun taqvim:\n{response} \n\n @Ramazon_Taqvimi_RoBot", replyMarkup: GetMainButtons());
+                    return;
+                }
 
-                string response = await GetPrayerTimes(region, date);
+                response = await GetPrayerTimes(region, date);
                 await bot.SendTextMessageAsync(chatId, $"📅 {date} uchun Ramazon taqvimi :\n{response} \n\n @Ramazon_Taqvimi_RoBot", replyMarkup: GetMainButtons());
             }
             await bot.AnswerCallbackQueryAsync(callback.Id);
         }
+    }
+
+    private static List<string> GetRegions()
+    {
+        return new List<string>
+        {
+            "Toshkent", "Andijon", "Namangan", "Farg‘ona", "Buxoro",
+            "Samarqand", "Xorazm", "Navoiy", "Qashqadaryo", "Surxondaryo",
+            "Jizzax", "Sirdaryo", "Qoraqalpog‘iston"
+        };
+    }
+
+    private static string GetUzbekMonthName(int month)
+    {
+        return month switch
+        {
+            1 => "yanvar",
+            2 => "fevral",
+            3 => "mart",
+            4 => "aprel",
+            5 => "may",
+            6 => "iyun",
+            7 => "iyul",
+            8 => "avgust",
+            9 => "sentyabr",
+            10 => "oktyabr",
+            11 => "noyabr",
+            12 => "dekabr",
+            _ => "Noma'lum"
+        };
     }
 
     private static Task ErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken token)
@@ -74,7 +178,6 @@ internal class Program
         Console.WriteLine($"Xatolik: {exception.Message}");
         return Task.CompletedTask;
     }
-
 
     private static async Task<string> GetPrayerTimes(string region, string date)
     {
@@ -119,9 +222,13 @@ internal class Program
                 InlineKeyboardButton.WithCallbackData($"{i+1}-mart", $"{region}|{i+1}-mart"),
                 InlineKeyboardButton.WithCallbackData($"{i+2}-mart", $"{region}|{i+2}-mart"),
                 InlineKeyboardButton.WithCallbackData($"{i+3}-mart", $"{region}|{i+3}-mart"),
-                InlineKeyboardButton.WithCallbackData($"{i+4}-mart", $"{region}|{i+4}-mart")
+                InlineKeyboardButton.WithCallbackData($"{i+4}-mart", $"{region}|{i+4}-mart"),
             });
         }
+        buttons.Add(new InlineKeyboardButton[]
+        {
+            InlineKeyboardButton.WithCallbackData("Bugungi Kun", $"{region}|Bugungi Kun")
+        });
         return new InlineKeyboardMarkup(buttons);
     }
 

@@ -1,0 +1,58 @@
+create table Persons (
+	PersonId bigint identity(1, 1) primary key,
+	FirstName nvarchar(50) not null,
+	LastName nvarchar(50) not null,
+	Email nvarchar(100) unique not null
+);
+
+create table Cars (
+	CarId bigint identity(1, 1) primary key,
+	Model nvarchar(50) not null,
+	Name nvarchar(50) not null,
+	PersonId bigint null,
+	CONSTRAINT FK_Cars_Persons FOREIGN KEY (PersonId) REFERENCES Persons(PersonId)
+);
+
+INSERT INTO Cars (Model, Name)
+VALUES 
+('BMW', 'X7'),
+('BMW', 'X4'),
+('BMW', 'X3'),
+('BMW', 'X5'),
+('BMW', 'X7'),
+('Ford', 'Mustang'),
+('Rover', 'Land'),
+('Damas', 'X7'),
+('Chevrolet', 'nexia 2');
+	
+INSERT INTO Persons (FirstName, LastName, Email)
+VALUES 
+('Ali', 'Husanov', 'email12'),
+('sdasadas', 'jmh', 'email2'),
+('Ali', 'asd', 'email3'),
+('nkjl;', 'Husanov', 'email4'),
+('Ali', 'asd', 'email5'),
+('pk[p', 'Husanov', 'email6'),
+('lkl;l', 'asda', 'email7'),
+('Ali', 'Husanov', 'email8'),
+('pk[l', 'Husanov', 'email9'),
+('Ali', '43857hdfs', 'email10');
+
+select * from Cars;
+
+select * from Persons;
+
+
+INSERT INTO Cars (Model, Name, PersonId)
+VALUES 
+('BMW', 'X7', 1),
+('BMW', 'X7', 5),
+('BMW', 'X7', 12);
+
+UPDATE Cars
+SET Model = 'Open', Name = 'z7', PersonId = 6
+WHERE CarId = 8;
+
+
+DELETE FROM Cars
+WHERE CarId = 4 OR CarId = 5;

@@ -7,4 +7,5 @@ public interface IExperienceService
     Task<ICollection<Experience>> GetExperiencesByUserInfoIdAsync(long userInfoId);
     Task<long> AddExperienceAsync(Experience experience);
     Task UpdateExperienceAsync(Experience experience);
+    Task DeleteExperienceAsync(long id, long userInfoId);
 }
