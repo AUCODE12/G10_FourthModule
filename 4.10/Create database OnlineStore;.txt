@@ -1,0 +1,300 @@
+Create database OnlineStore;
+
+create table Customers (
+	CustomersId bigint identity(1, 1) primary key,
+	FirstName nvarchar(50) not null,
+	LastName nvarchar(50) not null,
+	Email nvarchar(150) unique not null,
+	PhoneNumber nvarchar(20) not null,
+	CreateDate DATETIME DEFAULT GETDATE()
+);
+
+create table Category (
+	CategoryId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null
+);
+
+create table Products (
+	ProductsId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null,
+	Price decimal(10, 2) not null,
+	StockQuantity int not null,
+	CategoryId bigint unique not null,
+	CONSTRAINT FK_Products_Category FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+
+create table [Order] (
+	OrderId bigint identity(1, 1) primary key,
+	OrderDate Datetime default getdate(),
+	TotalAmount decimal(10, 2) not null,
+	CustomerId bigint not null,
+	CONSTRAINT FK_Order_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId)
+);
+
+ALTER TABLE Products
+ALTER COLUMN CategoryId bigint not null;
+
+create table OrderDetails (
+	OrderDetailsId bigint identity(1, 1) primary key,
+	Quentity int not null,
+	Subtotal decimal(10, 2) not null,
+	OrderId bigint not null,
+	ProductId bigint not null,
+	Constraint FK_OrderDetails_Order Foreign key (OrderId) References [Order](OrderId),
+	Constraint FK_OrderDetails_Products Foreign key (ProductId) References Products(ProductsId)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------
+
+Create database OnlineStore;
+
+drop database OnlineShop;
+
+create table Customers (
+	CustomersId bigint identity(1, 1) primary key,
+	FirstName nvarchar(50) not null,
+	LastName nvarchar(50) not null,
+	Email nvarchar(150) unique not null,
+	PhoneNumber nvarchar(20) not null,
+	CreateDate DATETIME DEFAULT GETDATE()
+);
+
+create table Category (
+	CategoryId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null
+);
+
+create table Products (
+	ProductsId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null,
+	Price decimal(10, 2) not null,
+	StockQuantity int not null,
+	CategoryId bigint not null,
+	CONSTRAINT FK_Products_Category FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+
+create table [Order] (
+	OrderId bigint identity(1, 1) primary key,
+	OrderDate Datetime default getdate(),
+	TotalAmount decimal(10, 2) not null,
+	CustomerId bigint not null,
+	CONSTRAINT FK_Order_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId)
+);
+
+ALTER TABLE Products
+ALTER COLUMN CategoryId bigint not null;
+
+ALTER TABLE Products
+DROP COLUMN FK_Order_Customers;
+
+create table OrderDetails (
+	OrderDetailsId bigint identity(1, 1) primary key,
+	Quentity int not null,
+	Subtotal decimal(10, 2) not null,
+	OrderId bigint not null,
+	ProductId bigint not null,
+	Constraint FK_OrderDetails_Order Foreign key (OrderId) References [Order](OrderId),
+	Constraint FK_OrderDetails_Products Foreign key (ProductId) References Products(ProductsId)
+);
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------
+
+
+Create database OnlineStore;
+
+drop database OnlineShop;
+
+create table Customers (
+	CustomersId bigint identity(1, 1) primary key,
+	FirstName nvarchar(50) not null,
+	LastName nvarchar(50) not null,
+	Email nvarchar(150) unique not null,
+	PhoneNumber nvarchar(20) not null,
+	CreateDate DATETIME DEFAULT GETDATE()
+);
+
+create table Category (
+	CategoryId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null
+);
+
+create table Products (
+	ProductsId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null,
+	Price decimal(10, 2) not null,
+	StockQuantity int not null,
+	CategoryId bigint not null,
+	CONSTRAINT FK_Products_Category FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+
+create table [Order] (
+	OrderId bigint identity(1, 1) primary key,
+	OrderDate Datetime default getdate(),
+	TotalAmount decimal(10, 2) not null,
+	CustomerId bigint not null,
+	CONSTRAINT FK_Order_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId)
+);
+
+ALTER TABLE Products
+ALTER COLUMN CategoryId bigint not null;
+
+ALTER TABLE Products
+DROP COLUMN FK_Order_Customers;
+
+create table OrderDetails (
+	OrderDetailsId bigint identity(1, 1) primary key,
+	Quentity int not null,
+	Subtotal decimal(10, 2) not null,
+	OrderId bigint not null,
+	ProductId bigint not null,
+	Constraint FK_OrderDetails_Order Foreign key (OrderId) References [Order](OrderId),
+	Constraint FK_OrderDetails_Products Foreign key (ProductId) References Products(ProductsId)
+);
+
+insert into Customers (FirstName, LastName, Email, PhoneNumber, CreateDate)
+values
+('Ahmad', 'Karimov', 'ahmad.karimov@example.com', '+998901234567', GETDATE()),  
+('Laylo', 'Mamatova', 'laylo.mamatova@example.com', '+998937654321', GETDATE()),  
+('Rustam', 'Bekmurodov', 'rustam.bekmurodov@example.com', '+998977890123', GETDATE()),  
+('Shoxrux', 'Norboyev', 'shoxrux.norboyev@example.com', '+998931112233', GETDATE()),  
+('Madina', 'Turgunova', 'madina.turgunova@example.com', '+998905556677', GETDATE()); 
+
+insert into Products (Name, Price, StockQuantity, CategoryId)
+values
+('iPhone 15', 1200.00, 10, 1),  
+('Samsung Galaxy S23', 1100.00, 15, 1),  
+('HP Laptop', 850.50, 5, 2),  
+('Logitech Mouse', 25.99, 30, 3),  
+('Sony Headphones', 99.99, 20, 3);
+
+ALTER TABLE Products  
+DROP CONSTRAINT FK_Products_Category;
+
+ALTER TABLE Products  
+ADD CONSTRAINT FK_Products_Category  
+FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId);
+
+
+INSERT INTO Category (CategoryId, Name)  
+VALUES  
+(1, 'Smartphones'),  
+(2, 'Laptops'),  
+(3, 'Accessories');
+
+
+
+--------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+Create database OnlineStore;
+
+drop database OnlineShop;
+
+create table Customers (
+	CustomersId bigint identity(1, 1) primary key,
+	FirstName nvarchar(50) not null,
+	LastName nvarchar(50) not null,
+	Email nvarchar(150) unique not null,
+	PhoneNumber nvarchar(20) not null,
+	CreateDate DATETIME DEFAULT GETDATE()
+);
+
+create table Category (
+	CategoryId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null
+);
+
+create table Products (
+	ProductsId bigint identity(1, 1) primary key,
+	Name nvarchar(100) not null,
+	Price decimal(10, 2) not null,
+	StockQuantity int not null,
+	CategoryId bigint not null,
+	CONSTRAINT FK_Products_Category FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+
+create table [Order] (
+	OrderId bigint identity(1, 1) primary key,
+	OrderDate Datetime default getdate(),
+	TotalAmount decimal(10, 2) not null,
+	CustomerId bigint not null,
+	CONSTRAINT FK_Order_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(CustomersId)
+);
+
+ALTER TABLE Products
+ALTER COLUMN CategoryId bigint not null;
+
+ALTER TABLE Products
+DROP COLUMN FK_Order_Customers;
+
+create table OrderDetails (
+	OrderDetailsId bigint identity(1, 1) primary key,
+	Quentity int not null,
+	Subtotal decimal(10, 2) not null,
+	OrderId bigint not null,
+	ProductId bigint not null,
+	Constraint FK_OrderDetails_Order Foreign key (OrderId) References [Order](OrderId),
+	Constraint FK_OrderDetails_Products Foreign key (ProductId) References Products(ProductsId)
+);
+
+insert into Customers (FirstName, LastName, Email, PhoneNumber, CreateDate)
+values
+('Ahmad', 'Karimov', 'ahmad.karimov@example.com', '+998901234567', GETDATE()),  
+('Laylo', 'Mamatova', 'laylo.mamatova@example.com', '+998937654321', GETDATE()),  
+('Rustam', 'Bekmurodov', 'rustam.bekmurodov@example.com', '+998977890123', GETDATE()),  
+('Shoxrux', 'Norboyev', 'shoxrux.norboyev@example.com', '+998931112233', GETDATE()),  
+('Madina', 'Turgunova', 'madina.turgunova@example.com', '+998905556677', GETDATE()); 
+
+insert into Products (Name, Price, StockQuantity, CategoryId)
+values
+('iPhone 15', 1200.00, 10, 1),  
+('Samsung Galaxy S23', 1100.00, 15, 1),  
+('HP Laptop', 850.50, 5, 2),  
+('Logitech Mouse', 25.99, 30, 3),  
+('Sony Headphones', 99.99, 20, 3);
+
+ALTER TABLE Products  
+DROP CONSTRAINT FK_Products_Category;
+
+ALTER TABLE Products  
+ADD CONSTRAINT FK_Products_Category  
+FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId);
+
+select * from Products;
+select * from Category;
+
+INSERT INTO Category (Name)  
+VALUES  
+('Smartphones'),  
+('Laptops'),  
+('Accessories');
+
+EXEC sp_fkeys @fktable_name = 'Products';

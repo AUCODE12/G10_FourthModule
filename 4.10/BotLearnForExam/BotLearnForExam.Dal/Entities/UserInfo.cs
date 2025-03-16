@@ -1,4 +1,4 @@
-﻿    namespace ChatBot.Dal.Entites;
+﻿namespace BotLearnForExam.Dal.Entities;
 
 public class UserInfo
 {
@@ -12,9 +12,4 @@ public class UserInfo
 
     public long BotUserId { get; set; }
     public BotUser BotUser { get; set; }
-
-    public ICollection<Education> Educations { get; set; }
-    public ICollection<Experience> Experiences { get; set; }
-    public ICollection<Skill> Skills { get; set; }
-    public ICollection<Project> Projects { get; set; }
 }
