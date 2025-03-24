@@ -106,15 +106,40 @@ group by c.CustomerID, c.Name
 Order by ummumiyXarajat desc
 
 --12. Barcha buyurtmalarni va har bir buyurtma bo'yicha mahsulotlar miqdorini ro'yxatlang:
+select o.OrderId, sum(oi.Quantity) as UmumiyMahsulot
+from Orders o
+inner join OrderItems oi
+on oi.OrderId = o.OrderId
+group by o.OrderId 
 
 
 --13. Har bir mijoz qancha mahsulot buyurtma qilganini toping va 5 tadan ko'p mahsulot buyurtma qilgan mijozlarni filtrlang:
+select c.CustomerId, Sum(oi.Quantity) as UmumiyMahsulot
+from Customers c 
+inner join Orders o on c.CustomerId = o.CustomerId
+inner join OrderItems oi on oi.OrderId = o.OrderId
+group by c.CustomerId
+HAVING SUM(oi.Quantity) > 5;
 
 --14. Eng ko'p miqdorda buyurtma qilingan mahsulotlarni oling:
+select top 1 oi.ProductId, Count(oi.ProductId) as miqdor
+from OrderItems oi
+group by oi.ProductId 
+order by miqdor desc
 
 --15. 2024 yil davomida har oyda qancha buyurtma berilganligini ro'yxatlang:
+select SUBSTRING(CONVERT(nvarchar, o.OrderDate, 120), 0, 8) as Res, Count(*) as Miqdor
+from Orders o
+where SUBSTRING(CONVERT(nvarchar, o.OrderDate, 120), 0, 5) = '2024'
+group by SUBSTRING(CONVERT(nvarchar, o.OrderDate, 120), 0, 8)
 
 --16. Eng qimmat buyurtma bergan mijozni toping:
+	select top 1 oi.OrderId, c.CustomerId, c.Name, Sum(oi.Quantity * oi.Price) as Summa
+	from OrderItems oi
+	inner join Orders o on o.OrderId = oi.OrderId
+	inner join Customers c on c.CustomerId = o.CustomerId
+	group by oi.OrderId, c.CustomerId, c.Name
+	order by summa desc
 
 --17. Mahsulotlarni va ularning jami sotilgan miqdorini ro'yxatlang, eng ko'p sotilgan bo'yicha tartiblangan:
 
